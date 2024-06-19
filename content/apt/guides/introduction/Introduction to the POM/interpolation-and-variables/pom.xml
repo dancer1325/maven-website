@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.introduction.pom</groupId>
+    <artifactId>interpolation-and-variables</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>interpolation-and-variables</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <girl.favourite>Rosi</girl.favourite>
+    </properties>
+
+    <build>
+        <plugins>
+            <!-- Which plugin goal to use? "print" does NOT exist -->
+            <!--<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>print</goal>
+                        </goals>
+                        <configuration>
+                            <properties>
+                                <property>project.basedir</property>
+                                <property>project.build.directory</property>
+                                <property>maven.build.timestamp</property>
+                            </properties>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>echo</executable>
+                            <arguments>
+                                <!-- Project Model Variables -->
+                                <argument>POM's variable - project.artifactId - ${project.artifactId}</argument>
+
+                                <!-- special built-in variables-->
+                                <argument>Project Base Directory: ${project.basedir}</argument>
+                                <argument>Project Build Directory: ${project.build.directory}</argument>
+                                <argument>Maven Build Timestamp: ${maven.build.timestamp}</argument>
+
+                                <!-- Defined properties-->
+                                <argument>Property - girl.favourite ${girl.favourite}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
