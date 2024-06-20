@@ -33,62 +33,55 @@ under the License.
     -  [Active Profiles](#active-profiles)
 
 ## Introduction
-
+* `settings.xml`
 ### Quick Overview
+* `settings.xml` file
+  * possible locations
+    * `${maven.home}/conf/settings.xml`
+      * Maven install / global settings
+      * == template / comments & examples
+    * `${user.home}/.m2/settings.xml`
+      * user's install / user settings
+      * 👁 if both exist 👁 -> 
+        * contents merged
+        * user specifics takes priority
+      * if you want to create from scratch -> copy from Maven global settings
+* `settings` element in the `settings.xml`
+  * uses
+    * define values / configure Maven execution ( _Example:_ `pom.xml`), 👁️ NOT bounded 👁️ to specific
+      * project OR
+      * audience
+  * top elements
+    ```xml
+    <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+      <localRepository/>
+      <interactiveMode/>
+      <offline/>
+      <pluginGroups/>
+      <servers/>
+      <mirrors/>
+      <proxies/>
+      <profiles/>
+      <activeProfiles/>
+    </settings>
+    ```
+  * interpolation
+    * ways to interpolate
+      * `${user.systemProperty}` 
+        * system properties
+        * _Example:_ `${user.home}`
+      * `${env.environmentVariableName}` 
+        * environment variables
+        * _Example:_ `${env.HOME}`
+    * restrictions
+      * ⚠️ `<profiles>` can NOT be used ⚠️
 
-The `settings` element in the `settings.xml` file contains elements used
-to define values which configure Maven execution in various ways, like
-the `pom.xml`, but should not be bundled to any specific project, or
-distributed to an audience. These include values such as the local
-repository location, alternate remote repository servers, and
-authentication information.
-
-There are two locations where a `settings.xml` file may live:
-
--   The Maven install: `${maven.home}/conf/settings.xml`
--   A user's install: `${user.home}/.m2/settings.xml`
-
-The former `settings.xml` is also called global settings, the latter
-`settings.xml` is referred to as user settings. If both files exist,
-their contents get merged, with the user-specific `settings.xml` being
-dominant.
-
-Tip: If you need to create user-specific settings from scratch, it's
-easiest to copy the global settings from your Maven installation to your
-`${user.home}/.m2` directory. Maven's default `settings.xml` is a
-template with comments and examples so you can quickly tweak it to match
-your needs.
-
-Here is an overview of the top elements under `settings`:
-
-```xml
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
-  <localRepository/>
-  <interactiveMode/>
-  <offline/>
-  <pluginGroups/>
-  <servers/>
-  <mirrors/>
-  <proxies/>
-  <profiles/>
-  <activeProfiles/>
-</settings>
-```
-
-The contents of `settings.xml` can be interpolated using the
-following expressions:
-
-1.  `${user.home}` and all other system properties
-2.  `${env.HOME}` etc. for environment variables
-
-Note that properties defined in profiles within `settings.xml`
-cannot be used for interpolation.
 
 ## Settings Details
 
 ### Simple Values
-
+* TODO:
 Half of the top-level `settings` elements are simple values,
 representing a range of values which describe elements of the build
 system that are active full-time.
@@ -137,7 +130,7 @@ For example, given the above settings the Maven command line may execute
     mvn jetty:run
 
 ### Servers
-
+* := remote repository servers
 The repositories for download and deployment are defined by the
 [`repositories`](./pom.html#Repositories) and
 [`distributionManagement`](./pom.html#Distribution_Management) elements
