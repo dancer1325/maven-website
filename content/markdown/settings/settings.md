@@ -106,7 +106,7 @@ system that are active full-time.
     which cannot connect to a remote repository, either because of
     network setup or security reasons.
 
-### Plugin Groups
+### `pluginGroups`
 
 This element contains a list of `pluginGroup` elements, each contains a
 groupId. The list is searched when a plugin is used and the groupId is
@@ -129,7 +129,7 @@ For example, given the above settings the Maven command line may execute
 
     mvn jetty:run
 
-### Servers
+### `servers`
 * := remote repository servers
 The repositories for download and deployment are defined by the
 [`repositories`](./pom.html#Repositories) and
@@ -183,7 +183,7 @@ A new feature - server password and passphrase encryption has been added
 to 2.1.0+. See details [on this
 page](./guides/mini/guide-encryption.html)
 
-### Mirrors
+### `mirrors`
 
 ```xml
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -217,7 +217,7 @@ page](./guides/mini/guide-encryption.html)
 For a more in-depth introduction of mirrors, please read the [Guide to
 Mirror Settings](./guides/mini/guide-mirror-settings.html).
 
-### Proxies
+### `proxies`
 
 ```xml
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -253,7 +253,7 @@ Mirror Settings](./guides/mini/guide-mirror-settings.html).
     server; the example above is pipe delimited - comma delimited is
     also common.
 
-### Profiles
+### `profiles`
 
 The `profile` element in the `settings.xml` is a truncated version of
 the `pom.xml` `profile` element. It consists of the `activation`,
@@ -266,7 +266,7 @@ settings.
 If a profile is active from `settings`, its values will override any
 equivalently ID'd profiles in a POM or `profiles.xml` file.
 
-#### Activation
+#### `profiles.profile.activation`
 
 Activations are the key of a profile. Like the POM's profiles, the power
 of a profile comes from its ability to modify some values only under
@@ -336,7 +336,7 @@ command line via a comma separated list after the `-P` flag (e.g.
 
     mvn help:active-profiles
 
-#### Properties
+#### `profiles.profile.properties`
 
 Maven properties are value placeholder, like properties in Ant. Their
 values are accessible anywhere within a POM by using the notation
@@ -382,7 +382,7 @@ all accessible from the `settings.xml` file:
 The property `${user.install}` is accessible from a POM if this profile
 is active.
 
-#### Repositories
+#### `profiles.profile.repositories`
 
 Repositories are remote collections of projects from which Maven uses to
 populate the local repository of the build system. It is from this local
@@ -470,7 +470,7 @@ element block is similar to the `repositories` element. The
 `pluginRepository` elements each specify a remote location of where
 Maven can find new plugins.
 
-### Active Profiles
+### `activeProfiles`
 
 ```xml
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
