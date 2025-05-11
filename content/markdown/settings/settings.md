@@ -33,7 +33,7 @@ under the License.
     -  [Active Profiles](#active-profiles)
 
 ## Introduction
-* `settings.xml`
+* "settings.xml"
 ### Quick Overview
 * `settings.xml` file
   * possible locations
@@ -46,46 +46,63 @@ under the License.
         * contents merged
         * user specifics takes priority
       * if you want to create from scratch -> copy from Maven global settings
-* `settings` element in the `settings.xml`
-  * uses
-    * define values / configure Maven execution ( _Example:_ `pom.xml`), 👁️ NOT bounded 👁️ to specific
-      * project OR
-      * audience
-  * top elements
-    ```xml
-    <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
-      <localRepository/>
-      <interactiveMode/>
-      <offline/>
-      <pluginGroups/>
-      <servers/>
-      <mirrors/>
-      <proxies/>
-      <profiles/>
-      <activeProfiles/>
-    </settings>
-    ```
-  * interpolation
-    * ways to interpolate
-      * `${user.systemProperty}` 
-        * system properties
-        * _Example:_ `${user.home}`
-      * `${env.environmentVariableName}` 
-        * environment variables
-        * _Example:_ `${env.HOME}`
-    * restrictions
-      * ⚠️ `<profiles>` can NOT be used ⚠️
-
+  * `settings` element
+    * uses
+      * define values / configure Maven execution ( _Example:_ `pom.xml`), 👁️ NOT bounded 👁️ to specific
+        * project OR
+        * audience
+    * top elements
+      ```xml
+      <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+        <localRepository/>
+        <interactiveMode/>
+        <offline/>
+        <pluginGroups/>
+        <servers/>
+        <mirrors/>
+        <proxies/>
+        <profiles/>
+        <activeProfiles/>
+      </settings>
+      ```
+    * interpolation
+      * ways to interpolate
+        * `${user.systemProperty}` 
+          * system properties
+          * _Example:_ `${user.home}`
+        * `${env.environmentVariableName}` 
+          * environment variables
+          * _Example:_ `${env.HOME}`
+      * restrictions
+        * ⚠️ `<profiles>` can NOT be used ⚠️
 
 ## Settings Details
 
 ### Simple Values
-* TODO:
-Half of the top-level `settings` elements are simple values,
-representing a range of values which describe elements of the build
-system that are active full-time.
+* HALF of the top-level `settings` elements
+  * `localRepository`
+    * path of this build system's local repository
+    * by default, `${user.home}/.m2/repository`
+    * uses
+      * main build server enable ALL logged-in users can build -- from a -- common local repository
+  * `interactiveMode`
+    * enable user to interact -- via -- input
+    * by default, `true`
+  * `offline`
+    * enable build system operate -- via -- offline mode
+    * by default, `false`
+    * uses
+      * build servers / can NOT connect -- to a -- remote repository
+        * POSSIBLE Reason: 🧠
+          * network setup
+          * security reasons🧠
+* == 👀range of values👀 / 
+  * describe build system's elements
+  * active FULL-time
 
+* _Example:_
+  ```xml,title=settings.xml
     <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
       <localRepository>${user.home}/.m2/repository</localRepository>
@@ -93,18 +110,7 @@ system that are active full-time.
       <offline>false</offline>
       ...
     </settings>
-
--   **localRepository**: This value is the path of this build system's
-    local repository. The default value is
-    `${user.home}/.m2/repository`. This element is especially useful for
-    a main build server allowing all logged-in users to build from a
-    common local repository.
--   **interactiveMode**: `true` if Maven should attempt to interact with
-    the user for input, `false` if not. Defaults to `true`.
--   **offline**: `true` if this build system should operate in offline
-    mode, defaults to `false`. This element is useful for build servers
-    which cannot connect to a remote repository, either because of
-    network setup or security reasons.
+  ```
 
 ### `pluginGroups`
 
@@ -131,51 +137,54 @@ For example, given the above settings the Maven command line may execute
 
 ### `servers`
 * := remote repository servers
-The repositories for download and deployment are defined by the
-[`repositories`](./pom.html#Repositories) and
-[`distributionManagement`](./pom.html#Distribution_Management) elements
-of the POM. However, certain settings such as `username` and `password`
-should not be distributed along with the `pom.xml`. This type of
-information should exist on the build server in the `settings.xml`.
+  * uses
+    * download
+    * deployment
+* | pom.xml, defined -- by --
+  * [`repositories`](../../apt/POMReference)
+  * [`distributionManagement`](../../apt/POMReference)
 
-```xml
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
-  ...
-  <servers>
-    <server>
-      <id>server001</id>
-      <username>my_login</username>
-      <password>my_password</password>
-      <privateKey>${user.home}/.ssh/id_dsa</privateKey>
-      <passphrase>some_passphrase</passphrase>
-      <filePermissions>664</filePermissions>
-      <directoryPermissions>775</directoryPermissions>
-      <configuration></configuration>
-    </server>
-  </servers>
-  ...
-</settings>
-```
 
--   **id**: This is the ID of the server *(not of the user to login as)*
-    that matches the `id` element of the repository/mirror that Maven
-    tries to connect to.
--   **username**, **password**: These elements appear as a pair denoting
-    the login and password required to authenticate to this server.
--   **privateKey**, **passphrase**: Like the previous two elements, this
-    pair specifies a path to a private key (default is
-    `${user.home}/.ssh/id_dsa`) and a `passphrase`, if required. The
-    `passphrase` and `password` elements may be externalized in the
-    future, but for now they must be set plain-text in the
-    `settings.xml` file.
--   **filePermissions**, **directoryPermissions**: When a repository
-    file or directory is created on deployment, these are the
-    permissions to use. The legal values of each is a three digit number
-    corresponding to \*nix file permissions, e.g. 664, or 775.
+* `id`
+  * server id
+  * != user -- to -- login
+* `username`, `password`
+  * allows
+    * authenticating | server
+  * recommendations
+    * ❌NOT add explicitly | "pom.xml" ❌
+* `privateKey`, `passphrase`
+  * recommendations
+    * ❌NOT add explicitly | "pom.xml" ❌
+  * by default, `${user.home}/.ssh/id_dsa`
+  * ⚠️if you ALSO use `password` -> `privateKey` is ignored ⚠️
+    * Reason: 🧠`password` is used 🧠
+* `filePermissions`, `directoryPermissions`
+  * == 3 digit number / -- correspond to -- file permissions
+  * _Example:_ 664, 775
+  * uses
+    * | deployment, create repository file or directory
 
-*Note:* If you use a private key to login to the server, make sure you
-omit the `<password>` element. Otherwise, the key will be ignored.
+* _Example:_
+    ```xml
+    <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+      ...
+      <servers>
+        <server>
+          <id>server001</id>
+          <username>my_login</username>
+          <password>my_password</password>
+          <privateKey>${user.home}/.ssh/id_dsa</privateKey>
+          <passphrase>some_passphrase</passphrase>
+          <filePermissions>664</filePermissions>
+          <directoryPermissions>775</directoryPermissions>
+          <configuration></configuration>
+        </server>
+      </servers>
+      ...
+    </settings>
+    ```
 
 #### Password Encryption
 
